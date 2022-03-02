@@ -1,0 +1,89 @@
+@mixin base_style {
+  content:'';
+  position:absolute;
+  display:block;
+}
+
+@mixin border-top-1px ($color){
+  &::before {
+    @include base_style;
+    border-top:1px solid $color;
+    width:100%;
+    transform-origin:0 top;
+  }
+  @media screen and (min-resolution:2dppx){
+    &::before {
+      width:200%;
+      transform:scale(.5) translateZ(0)
+    }
+  }
+  @media (min-resolution:3dppx){
+    &&::before {
+      width:300%;
+      transform:scale(.33) translateZ(0)
+    }
+  }
+}
+
+@mixin border-bottom-1px ($color) {
+  &::after {
+    @include base_style;
+    border-bottom:1px solid $color;
+    width:100%;
+    transform-origin:0 bottom;
+  }
+  @media screen and (min-resolution:2dppx){
+    &::before {
+      width:200%;
+      transform:scale(.5) translateZ(0)
+    }
+  }
+  @media (min-resolution:3dppx){
+    &&::before {
+      width:300%;
+      transform:scale(.33) translateZ(0)
+    }
+  }
+}
+
+@mixin border-left-1px ($color) {
+  &::before {
+    @include base_style;
+    border-left:1px solid $color;
+    height:100%;
+    transform-origin:left top;
+  }
+  @media screen and (min-resolution:2dppx){
+    &::before {
+      height:200%;
+      transform:scale(.5) translateZ(0)
+    }
+  }
+  @media (min-resolution:3dppx){
+    &&::before {
+      height:300%;
+      transform:scale(.33) translateZ(0)
+    }
+  }
+}
+
+@mixin border-right-1px ($color) {
+  &::after {
+    @include base_style;
+    border-right:1px solid $color;
+    height:100%;
+    transform-origin:right top
+  }
+  @media screen and (min-resolution:2dppx){
+    &::before {
+      height:200%;
+      transform:scale(.5) translateZ(0)
+    }
+  }
+  @media (min-resolution:3dppx){
+    &&::before {
+      height:300%;
+      transform:scale(.33) translateZ(0)
+    }
+  }
+}
