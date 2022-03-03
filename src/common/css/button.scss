@@ -1,0 +1,35 @@
+button{outline:none;padding:4px 8px;font-size:14px;cursor:pointer;transition:all .4s;}
+button.primary{
+  background-color:#1890ff;
+  color:#fff;
+  border:1px solid #1890ff;
+  &:hover{
+    background-color:#2482ff;
+  }
+  &:active{
+    background-color:#0061e1;
+  }
+}
+button.danger{
+  background-color:#ff2f3a;
+  color:#fff;
+  &:hover{
+    background-color:#ff6b6a;
+  }
+  &:active{
+    background-color:#ea0b2a;
+  }
+}
+button.default{
+  background-color:#fff;
+  color:rgba(0,0,0,.85);
+  border:1px solid #d9d9d9;
+  &:hover{
+    color:#40a9ff;
+    border-color:#40a9ff;
+  }
+  &:active{
+    color:#096dd9;
+    border-color:#096dd9;
+  }
+}
