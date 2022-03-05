@@ -11,7 +11,7 @@ import NavigationBar, { UserProps } from '@/components/navigation-bar/index.vue'
 const user: UserProps = {
   name: 'kyrie',
   id: 1,
-  isLogin: false
+  isLogin: true
 }
 
 export default defineComponent({

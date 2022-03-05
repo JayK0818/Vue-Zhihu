@@ -5,7 +5,7 @@
     </div>
     <div class='button-container'>
       <template v-if='user.isLogin'>
-        <button class='primary'>Hello {{user.name}}</button>
+      <drop-down :title='user.name'/>
       </template>
       <template v-else>
         <button class='primary'>登录</button>
@@ -17,6 +17,7 @@
 
 <script lang='ts'>
 import { defineComponent, PropType } from 'vue'
+import DropDown from '@/components/drop-down/index.vue'
 export interface UserProps {
   isLogin: boolean;
   name?: string;
@@ -24,18 +25,14 @@ export interface UserProps {
 }
 export default defineComponent({
   name: 'navigation-bar',
-  data () {
-    return {
-    }
+  components: {
+    [DropDown.name]: DropDown
   },
   props: {
     user: {
       type: Object as PropType<UserProps>,
       required: true
     }
-  },
-  setup () {
-    console.log('hello')
   }
 })
 </script>
