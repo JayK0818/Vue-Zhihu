@@ -1,4 +1,4 @@
-button{outline:none;padding:4px 8px;font-size:14px;cursor:pointer;transition:all .4s;}
+button{outline:none;padding:5px 10px;font-size:14px;cursor:pointer;transition:all .4s;}
 button.primary{
   background-color:#1890ff;
   color:#fff;
@@ -32,4 +32,7 @@ button.default{
     color:#096dd9;
     border-color:#096dd9;
   }
+}
+button.block{
+  width:100%;
 }

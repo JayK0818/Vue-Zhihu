@@ -1,20 +1,20 @@
 <template>
   <div class='input-wrapper' :class="{'is-validate': inputRef.error}">
-    <i class="icon"><slot/></i>
+    <slot name='prefix'/>
     <input
-      :type="type"
       class='input'
       @blur='inputBlur'
-      :placeholder='placeholder'
       :value='inputRef.value'
       @input='onValueChanged'
+      v-bind='$attrs'
     >
   </div>
   <div v-if='inputRef.error' class='error-message'>{{inputRef.message}}</div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, PropType, reactive } from 'vue'
+import { defineComponent, PropType, reactive, onMounted } from 'vue'
+import { emitter } from '../validate-form/index.vue'
 interface RuleProp {
   type: 'required' | 'email' | 'password';
   message: string
@@ -24,17 +24,8 @@ const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
 
 export default defineComponent({
   name: 'validate-input',
-  components: {
-  },
+  inheritAttrs: false, // 不希望组件的根元素继承attribute
   props: {
-    type: {
-      type: String,
-      default: 'text'
-    },
-    placeholder: {
-      type: String,
-      default: ''
-    },
     rules: {
       type: Array as PropType<RuleProp []>
     },
@@ -55,7 +46,7 @@ export default defineComponent({
       inputRef.value = value
       context.emit('update:modelValue', value)
     }
-    function inputBlur ():void {
+    function inputBlur (): boolean {
       if (props.rules) {
         const flag = props.rules.every(rule => {
           let passed = true
@@ -73,8 +64,13 @@ export default defineComponent({
           return passed
         })
         inputRef.error = !flag
+        return flag
       }
+      return true
     }
+    onMounted(() => {
+      emitter.emit('validate-form', inputBlur)
+    })
     return {
       inputRef, inputBlur, onValueChanged
     }
@@ -83,11 +79,11 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .input-wrapper{
-  padding:0 2px;
+  padding:0 6px;
   display:flex;
   align-items:center;
   border:1px solid #d9d9d9;
-  height:32px;
+  height:36px;
   transition:all .3s;
   .input {
     padding:0;
@@ -96,7 +92,7 @@ export default defineComponent({
     color:rgba(0,0,0,.65);
     flex:1;
     min-width:0;
-    text-indent:4px;
+    text-indent:6px;
     height:100%;
     &::-webkit-input-placeholder{
       color:rgba(0,0,0,.35);
