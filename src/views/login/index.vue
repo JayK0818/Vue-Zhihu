@@ -84,7 +84,7 @@ export default defineComponent({
   .subtitle{
     font-size:16px;
     padding:4px 0 8px 0;
-    color:rgba(0,0,0,.65);
+    color:rgba(0,0,0,.85);
   }
 }
 </style>

@@ -16,7 +16,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, PropType } from 'vue'
+import { defineComponent } from 'vue'
 import DropDown from '@/components/drop-down/index.vue'
 export interface UserProps {
   isLogin: boolean;
@@ -28,10 +28,13 @@ export default defineComponent({
   components: {
     [DropDown.name]: DropDown
   },
-  props: {
-    user: {
-      type: Object as PropType<UserProps>,
-      required: true
+  setup () {
+    return {
+      user: {
+        isLogin: true,
+        name: 'kyrie',
+        id: 1
+      }
     }
   }
 })
