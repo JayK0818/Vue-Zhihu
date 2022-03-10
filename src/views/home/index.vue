@@ -8,6 +8,7 @@
         <v-button>开始写文章</v-button>
       </div>
     </div>
+    <div class="column-title">专栏 · 发现</div>
   </div>
 </template>
 
@@ -63,5 +64,9 @@ export default defineComponent({
   .button-container{
     margin-top:30px;
   }
+}
+.column-title{
+  font-weight:bold;
+  color:#000;
 }
 </style>
