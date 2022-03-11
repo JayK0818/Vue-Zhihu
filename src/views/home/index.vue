@@ -5,35 +5,65 @@
       <div class="logo"></div>
       <div class="title">随心写作,自由表达</div>
       <div class="button-container">
-        <v-button>开始写文章</v-button>
+        <v-button type="default">开始写文章</v-button>
       </div>
     </div>
-    <div class="column-title">专栏 · 发现</div>
+    <div class="column-recommendation-wrapper">
+      <div class="column-title">专栏 · 发现</div>
+      <div class="column-container">
+        <column-list :list='columnList'/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang='ts'>
 import NavigationBar from '@/components/navigation-bar/index.vue'
 import VButton from '@/components/v-button/index.vue'
+import ColumnList, { ColumnProps } from '@/components/column-list/index.vue'
 import { RedoOutlined } from '@ant-design/icons-vue'
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import axios from '@/common/js/axios.js'
 export default defineComponent({
   name: 'home',
   components: {
     [NavigationBar.name]: NavigationBar,
     [VButton.name]: VButton,
-    [RedoOutlined.name]: RedoOutlined
+    [RedoOutlined.name]: RedoOutlined,
+    [ColumnList.name]: ColumnList
   },
   setup () {
-    axios.get('/api/players').then(res => {
-      console.log(res)
+    const columnList = ref<ColumnProps []>([])
+    function getColumnList (): Promise<ColumnProps[]> {
+      return new Promise(resolve => {
+        axios({
+          url: '/api/get_columns',
+          params: {
+            id: 1
+          }
+        }).then(res => {
+          resolve(res)
+        }).catch(() => {
+          resolve([])
+        })
+      })
+    }
+    onMounted(() => {
+      getColumnList().then(list => {
+        columnList.value = list
+      })
     })
+    return {
+      columnList
+    }
   }
 })
 </script>
 
 <style scoped lang='scss'>
+.page{
+  background-color:#fbfcfc;
+}
 .column-wrapper-header{
   display:flex;
   flex-direction:column;
@@ -65,8 +95,19 @@ export default defineComponent({
     margin-top:30px;
   }
 }
+.column-recommendation-wrapper{
+  padding-top:10px;
+  padding-bottom:10px;
+}
+.column-container{
+  margin:30px auto 0;
+  width:888px;
+  display:flex;
+  flex-wrap:wrap;
+}
 .column-title{
   font-weight:bold;
-  color:#000;
+  color:#121212;
+  text-align:center;
 }
 </style>
