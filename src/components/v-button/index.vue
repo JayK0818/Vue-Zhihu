@@ -1,6 +1,6 @@
 <template>
-  <button class="button" :class="[type,size]">
-    <span v-if="hasIcon" class='icon'>
+  <button class="button" :class="[type,size]" @click.stop="handleClick">
+    <span v-if="hasIcon" class='icon' :class="{active:loading}">
       <slot name="prefix"></slot>
     </span>
     <slot/>
@@ -8,10 +8,9 @@
 </template>
 
 <script lang="ts">
-import { ref, PropType } from 'vue'
-
-type buttonType = 'primary' | 'default' | 'danger'
-type buttonSize = 'small' | 'medium' | 'large'
+import { ref } from 'vue'
+// type buttonType = 'primary' | 'default' | 'danger'
+// type buttonSize = 'small' | 'medium' | 'large'
 
 export default {
   name: 'v-button',
@@ -23,16 +22,26 @@ export default {
     size: {
       type: String,
       default: 'medium'
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
+  emits: ['click'],
   // eslint-disable-next-line
   setup (props, context) {
     const hasIcon = ref<boolean>(false)
     if (context.slots.prefix) {
       hasIcon.value = true
     }
+    function handleClick () {
+      if (props.loading) return
+      context.emit('click')
+    }
     return {
-      hasIcon
+      hasIcon,
+      handleClick
     }
   }
 }
@@ -47,7 +56,10 @@ export default {
     transform:rotate(360deg)
   }
 }
-.icon.active{
-  animation:iconMove 3s linear 0s infinite;
+.icon{
+  display:inline-block;
+  &.active{
+    animation: iconMove 1s linear 0s infinite;
+  }
 }
 </style>
