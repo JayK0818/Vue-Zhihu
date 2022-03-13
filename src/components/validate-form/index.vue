@@ -44,8 +44,4 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-.form-container{
-  padding:10px;
-  background-color:#fff;
-}
 </style>

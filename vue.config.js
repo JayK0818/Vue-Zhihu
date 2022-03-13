@@ -1,6 +1,20 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const columns = require('./src/mock/column.json')
 const items = require('./src/mock/items.json')
+const sha1 = require('sha1')
+const password = sha1('123456')
+
+function parsePostData (req) {
+  return new Promise(resolve => {
+    let str = ''
+    req.on('data', function (chunk) {
+      str += chunk
+    })
+    req.on('end', function () {
+      resolve(JSON.parse(str))
+    })
+  })
+}
 
 module.exports = {
   devServer: {
@@ -32,6 +46,21 @@ module.exports = {
           res.send({
             code: 200,
             data: []
+          })
+        }
+      })
+      app.post('/api/login', async function (req, res) {
+        const object = await parsePostData(req)
+        if (object.username === 'admin' && object.password === password){
+          res.send({
+            code: 200,
+            data: []
+          })
+        }else{
+          res.send({
+            code: 0,
+            data: null,
+            message: '用户名或密码错误'
           })
         }
       })
