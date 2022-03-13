@@ -4,7 +4,6 @@ const instance = axios.create({
 })
 
 instance.interceptors.response.use(function (response) {
-  console.log(response)
   if (response.data.code === 200) {
     return response.data.data
   }

@@ -1,0 +1,146 @@
+<template>
+  <navigation-bar/>
+  <div class="page">
+    <loading v-if="spinning"/>
+    <div v-if="list.length" class="column-container">
+      <div class="column-item" v-for="item in list" :key="item.id">
+        <div class="title">{{item.title}}</div>
+        <template v-if="!item.is_fold">
+          <div class="author">
+            <img :src="item.author.avatar_url" alt="" class="author-image">
+            <span class="author-name">{{item.author.name}}</span>
+            <span class="description">{{item.author.headline}}</span>
+          </div>
+          <div class="agree-text">{{item.voteup_count}} 人赞同了该文章</div>
+        </template>
+        <div class="content">
+          <template v-if="item.is_fold">{{item.excerpt}}</template>
+          <template v-else>
+            <div v-html="item.content"></div>
+          </template>
+          <span class="read-more" @click.stop="handleToggleItemFold(item)">
+            <template v-if="item.is_fold">阅读全文<i class="icon"><down-outlined/></i></template>
+            <template v-else>收起<i class="icon"><up-outlined/></i></template>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <back-top/>
+</template>
+
+<script lang="ts">
+import { defineComponent, onMounted, ref } from 'vue'
+import NavigationBar from '@/components/navigation-bar/index.vue'
+import Loading from '@/components/loading/index.vue'
+import { useRoute } from 'vue-router'
+import axios from '@/common/js/axios.js'
+import { DownOutlined, UpOutlined } from '@ant-design/icons-vue'
+import BackTop from '@/components/back-top/index.vue'
+
+export default defineComponent({
+  components: {
+    [NavigationBar.name]: NavigationBar,
+    [Loading.name]: Loading,
+    [DownOutlined.name]: DownOutlined,
+    [UpOutlined.name]: UpOutlined,
+    [BackTop.name]: BackTop
+  },
+  name: 'column-page',
+  setup () {
+    const spinning = ref<boolean>(true)
+    const list = ref([])
+    const route = useRoute()
+    function getColumnItem () {
+      axios({
+        url: '/api/get_column_item',
+        method: 'get',
+        params: {
+          id: route.params.id
+        }
+      }).then(res => {
+        list.value = res.map(item => ({ ...item, is_fold: true }))
+      }).finally(() => {
+        spinning.value = false
+      })
+    }
+    function handleToggleItemFold (item) {
+      item.is_fold = !item.is_fold
+    }
+    onMounted(() => {
+      getColumnItem()
+    })
+    return {
+      spinning,
+      list,
+      handleToggleItemFold
+    }
+  }
+})
+</script>
+
+<style scoped lang="scss">
+.page{
+  color:#121212;
+  padding-top:16px;
+  background-color:#f6f6f6;
+  .column-container{
+    margin:0 auto;
+    width:740px;
+    background-color:#fff;
+    .column-item{
+      cursor:pointer;
+      padding:16px 20px;
+      border-bottom:1px solid #e8e8e8;
+    }
+    .agree-text{
+      padding:10px 0;
+      font-size:14px;
+      color:#8590a6;
+    }
+    .content{
+      padding-top:10px;
+      line-height:24px;
+      font-size:15px;
+      transition:all .3s;
+      user-select:none;
+      &:hover{
+        color:rgba(0,0,0,.65);
+      }
+    }
+    .read-more{
+      font-size:14px;
+      margin-left:4px;
+      color:#175199;
+      white-space:nowrap;
+      .icon{
+        font-size:14px;
+      }
+    }
+  }
+  .title{
+    padding:6px 0;
+    font-size:18px;
+    font-weight:bold;
+  }
+  .author{
+    padding:8px 0;
+    display:flex;
+    align-items:center;
+    .author-image{
+      width:30px;
+      height:30px;
+    }
+    .author-name{
+      padding-left:6px;
+      padding-right:6px;
+      color:#444;
+      font-size:15px;
+    }
+    .description{
+      color:#646464;
+      font-size:14px;
+    }
+  }
+}
+</style>

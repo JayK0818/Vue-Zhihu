@@ -41,12 +41,15 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .header{
+  position:sticky;
+  top:0;
   display:flex;
   align-items:center;
   justify-content:space-between;
   min-width:1000px;
   padding:0 30px 0 20px;
   height:54px;
+  background-color:#fff;
   .icon{
     height:100%;
     padding-top:8px;

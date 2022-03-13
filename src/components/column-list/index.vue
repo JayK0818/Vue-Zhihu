@@ -11,7 +11,7 @@
       <span class="article">{{column.articles_count}} 篇文章</span>
     </div>
     <div class="button-container">
-      <v-button type="primary" size="small">进入专栏</v-button>
+      <v-button type="primary" size="small" @click="handleIntoColumn(column.id)">进入专栏</v-button>
     </div>
   </div>
 </template>
@@ -20,6 +20,7 @@
 import { defineComponent, PropType } from 'vue'
 import { numberTransform } from '@/common/js/util'
 import VButton from '@/components/v-button/index.vue'
+import { useRouter } from 'vue-router'
 
 export interface ColumnProps {
   id: number
@@ -45,11 +46,16 @@ export default defineComponent({
     [VButton.name]: VButton
   },
   setup () {
+    const router = useRouter()
     function formatFlowers (flowers: number): number | string { // 格式化关注数为千分位
       return numberTransform(flowers)
     }
+    function handleIntoColumn (id) { // 导航
+      router.push(`/column/${id}`)
+    }
     return {
-      formatFlowers
+      formatFlowers,
+      handleIntoColumn
     }
   }
 })

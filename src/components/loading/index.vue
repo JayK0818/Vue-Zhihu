@@ -3,7 +3,7 @@
     <div class="loading-wrapper">
       <div class="loading-container">
         <div class="icon"><loading-outlined/></div>
-        <div class="text">拼命加载数据...</div>
+        <div class="text">拼命加载数据 ...</div>
       </div>
     </div>
   </teleport>

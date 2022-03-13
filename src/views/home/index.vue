@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <navigation-bar/>
-    <loading/>
+    <loading v-if="spinning"/>
     <div class="column-wrapper-header">
       <div class="logo"></div>
       <div class="title">随心写作,自由表达</div>
@@ -57,6 +57,7 @@ export default defineComponent({
       return new Promise(resolve => {
         axios({
           url: '/api/get_columns',
+          method: 'get',
           params: {
             id: page
           }
@@ -70,6 +71,8 @@ export default defineComponent({
     onMounted(() => {
       getColumnList(page.value).then(list => {
         columnList.value = list
+      }).finally(() => {
+        spinning.value = false
       })
     })
     function changeColumn () {
@@ -88,7 +91,8 @@ export default defineComponent({
     return {
       columnList,
       changeColumn,
-      loading
+      loading,
+      spinning
     }
   }
 })
