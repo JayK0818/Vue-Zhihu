@@ -5,12 +5,18 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      title: '有问题,就会有答案'
+    }
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import(/* webpackChunkName:'login' */ '@/views/login/index.vue')
+    component: () => import(/* webpackChunkName:'login' */ '@/views/login/index.vue'),
+    meta: {
+      title: '用户登录'
+    }
   },
   {
     path: '/column/:id',

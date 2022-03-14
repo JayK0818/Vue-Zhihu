@@ -11,6 +11,7 @@
             placeholder='请输入用户名 (admin)'
             v-model='username'
             type="text"
+            v-focus
           >
             <template #prefix><user-outlined/></template>
           </validate-input>
@@ -27,7 +28,7 @@
           </validate-input>
         </div>
         <template v-slot:submit>
-          <button class="primary-button block">登录</button>
+          <button class="primary-button block" :class='{disabled:loading}'>登录</button>
         </template>
       </validate-form>
       <div class="info">未注册手机验证后自动登录，注册即代表同意《知乎协议》《隐私保护指引》</div>
@@ -42,6 +43,8 @@ import ValidateInput, { RulesProp } from '@/components/validate-input/index.vue'
 import ValidateForm from '@/components/validate-form/index.vue'
 import axios from '@/common/js/axios.js'
 import sha1 from 'sha1'
+import { saveCurrentUser } from '@/common/js/util'
+import { useRouter } from 'vue-router'
 /* const emailRule: RulesProp = [
   {
     type: 'required',
@@ -76,8 +79,12 @@ export default defineComponent({
   setup () {
     const username = ref<string>('')
     const password = ref<string>('')
+    const loading = ref<boolean>(false)
+    const router = useRouter()
     const login = (value:boolean) => {
       if (value) {
+        if (loading.value) return
+        loading.value = true
         axios({
           url: '/api/login',
           method: 'post',
@@ -85,6 +92,16 @@ export default defineComponent({
             username: username.value,
             password: sha1(password.value)
           }
+        }).then(() => {
+          saveCurrentUser({
+            username: username.value,
+            isLogin: true
+          })
+          router.push('/')
+        }).catch(() => {
+          window.alert('账号或密码错误')
+        }).finally(() => {
+          loading.value = false
         })
       }
     }
@@ -93,7 +110,16 @@ export default defineComponent({
       password,
       passwordRule,
       login,
-      userRule
+      userRule,
+      loading
+    }
+  },
+  directives: {
+    focus: {
+      mounted (el) {
+        const input = el.querySelector('input')
+        input && input.focus()
+      }
     }
   }
 })
@@ -164,6 +190,10 @@ export default defineComponent({
   }
   &:active{
     background-color:#096dd9;
+  }
+  &.disabled{
+    cursor:not-allowed;
+    background-color:#40a9ff;
   }
 }
 .info{

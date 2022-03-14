@@ -1,15 +1,17 @@
 <template>
-  <div class='input-wrapper' :class="{'is-validate': inputRef.error}">
-    <slot name='prefix'/>
-    <input
-      class='input'
-      @blur='inputBlur'
-      :value='inputRef.value'
-      @input='onValueChanged'
-      v-bind='$attrs'
-    >
+  <div>
+    <div class='input-wrapper' :class="{'is-validate': inputRef.error}">
+      <slot name='prefix'/>
+      <input
+        class='input'
+        @blur='inputBlur'
+        :value='inputRef.value'
+        @input='onValueChanged'
+        v-bind='$attrs'
+      >
+    </div>
+    <div v-if='inputRef.error' class='error-message'>{{inputRef.message}}</div>
   </div>
-  <div v-if='inputRef.error' class='error-message'>{{inputRef.message}}</div>
 </template>
 
 <script lang='ts'>

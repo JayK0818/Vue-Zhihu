@@ -5,36 +5,47 @@
     </div>
     <div class='button-container'>
       <template v-if='user.isLogin'>
-      <drop-down :title='user.name'/>
+        <drop-down :title='user.username'/>
       </template>
       <template v-else>
-        <button class='primary'>登录</button>
-        <button class='default register-button'>注册</button>
+        <v-button type="primary" size="small" @click="login">登录</v-button>
       </template>
     </div>
   </div>
 </template>
 
 <script lang='ts'>
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import DropDown from '@/components/drop-down/index.vue'
+import { getCurrentUser } from '@/common/js/util'
+import VButton from '@/components/v-button/index.vue'
+import { useRouter } from 'vue-router'
 export interface UserProps {
   isLogin: boolean;
-  name?: string;
-  id?: number
+  username: string;
 }
 export default defineComponent({
   name: 'navigation-bar',
   components: {
-    [DropDown.name]: DropDown
+    [DropDown.name]: DropDown,
+    [VButton.name]: VButton
   },
   setup () {
+    const router = useRouter()
+    const userInfo = ref<UserProps>({
+      username: '',
+      isLogin: false
+    })
+    const user = getCurrentUser()
+    if (user) {
+      userInfo.value = user
+    }
+    function login ():void {
+      router.push('/login')
+    }
     return {
-      user: {
-        isLogin: true,
-        name: 'kyrie',
-        id: 1
-      }
+      login,
+      user: userInfo
     }
   }
 })

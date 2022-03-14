@@ -1,18 +1,32 @@
 <template>
   <div class='dropdown-container' ref='dropdownRef'>
-    <button class='button primary' @click.stop='toggle'>Hello {{title}} <caret-down-outlined /></button>
+    <button class='button primary' @click.stop='toggle'>hello {{title}} <caret-down-outlined /></button>
     <ul class='dropdown-menu shadow' v-show='visible'>
-      <dropdown-item>hello world</dropdown-item>
-      <dropdown-item disabled>hello world</dropdown-item>
-      <dropdown-item>hello world</dropdown-item>
+      <dropdown-item>
+        <div class="item">
+          <span class="icon"><form-outlined/></span>
+          <span class="text">写文章</span>
+        </div>
+      </dropdown-item>
+      <dropdown-item>
+        <div class="item">
+          <span class="icon"><edit-outlined/></span>
+          <span class="text">专栏</span>
+        </div>
+      </dropdown-item>
+      <dropdown-item>
+        <div class="item" @click.stop="logout"><span class="icon"><logout-outlined/></span><span class="text">退出登录</span></div>
+      </dropdown-item>
     </ul>
   </div>
 </template>
 
 <script lang='ts'>
 import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
-import { CaretDownOutlined } from '@ant-design/icons-vue'
+import { CaretDownOutlined, LogoutOutlined, FormOutlined, EditOutlined } from '@ant-design/icons-vue'
 import DropdownItem from './components/dropdown-item.vue'
+import { userKey } from '@/common/js/util'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'drop-down',
@@ -24,11 +38,15 @@ export default defineComponent({
   },
   components: {
     [CaretDownOutlined.name]: CaretDownOutlined,
-    [DropdownItem.name]: DropdownItem
+    [DropdownItem.name]: DropdownItem,
+    [LogoutOutlined.name]: LogoutOutlined,
+    [FormOutlined.name]: FormOutlined,
+    [EditOutlined.name]: EditOutlined
   },
   setup () {
     const dropdownRef = ref<null | HTMLElement>(null)
     const visible = ref<boolean>(false)
+    const router = useRouter()
     function toggle ():void {
       visible.value = !visible.value
     }
@@ -45,11 +63,15 @@ export default defineComponent({
     onUnmounted(() => {
       document.removeEventListener('click', handler, false)
     })
-
+    function logout (): void {
+      window.localStorage.removeItem(userKey)
+      router.replace('/login')
+    }
     return {
       visible,
       toggle,
-      dropdownRef
+      dropdownRef,
+      logout
     }
   }
 })
@@ -70,6 +92,16 @@ export default defineComponent({
     text-align:left;
     z-index:1000;
     background-color:#fff;
+  }
+  .button{
+    height:28px;
+  }
+  .item{
+    padding:3px 0;
+    color:rgb(133,144,166);
+  }
+  .text{
+    padding-left:8px;
   }
 }
 </style>
