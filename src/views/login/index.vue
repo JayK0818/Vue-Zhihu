@@ -33,6 +33,10 @@
       </validate-form>
       <div class="info">未注册手机验证后自动登录，注册即代表同意《知乎协议》《隐私保护指引》</div>
     </div>
+    <div class="footer">
+      <div class="link-text">知乎专栏圆桌发现移动应用联系我们来知乎工作注册机构号Investor Relations</div>
+      <div class="link-text">侵权举报网上有害信息举报专区儿童色情信息举报专区违法和不良信息举报：010-82716601举报邮箱：jubao@zhihu.com</div>
+    </div>
   </div>
 </template>
 
@@ -45,16 +49,8 @@ import axios from '@/common/js/axios.js'
 import sha1 from 'sha1'
 import { saveCurrentUser } from '@/common/js/util'
 import { useRouter } from 'vue-router'
-/* const emailRule: RulesProp = [
-  {
-    type: 'required',
-    message: '邮箱不得为空'
-  },
-  {
-    type: 'email',
-    message: '请输入合法的邮箱地址'
-  }
-] */
+import message from '@/components/message/index'
+
 const passwordRule: RulesProp = [
   {
     type: 'required',
@@ -85,6 +81,7 @@ export default defineComponent({
       if (value) {
         if (loading.value) return
         loading.value = true
+        message.loading('正在登录...', 0)
         axios({
           url: '/api/login',
           method: 'post',
@@ -98,10 +95,12 @@ export default defineComponent({
             isLogin: true
           })
           router.push('/')
-        }).catch(() => {
+        }).catch((err) => {
+          console.log(err)
           window.alert('账号或密码错误')
         }).finally(() => {
           loading.value = false
+          // hide()
         })
       }
     }
@@ -141,6 +140,15 @@ export default defineComponent({
   background-position:center;
   background-size:cover;
   background-repeat:no-repeat;
+  .footer{
+    padding-top:20px;
+    text-align:center;
+    font-size:12px;
+    color:#fff;
+  }
+  .link-text{
+    padding:5px 0;
+  }
 }
 .login-logo{
   margin:0 auto 16px;

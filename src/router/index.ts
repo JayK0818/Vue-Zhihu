@@ -7,7 +7,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Home',
     component: Home,
     meta: {
-      title: '有问题,就会有答案'
+      title: '知乎专栏 - 随心写作,自由表达'
     }
   },
   {
@@ -28,6 +28,14 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const title = to.meta.title
+  if (typeof title === 'string') {
+    document.title = title
+  }
+  next()
 })
 
 export default router
