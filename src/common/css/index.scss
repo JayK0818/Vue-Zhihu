@@ -18,3 +18,24 @@ figure{
   right:0;
   text-align:center;
 }
+blockquote{
+  padding:16px 0 16px 10px;
+  font-size:16px;
+  color: rgb(100, 100, 100);
+  border-left: 3px solid rgb(211, 211, 211);
+  b{
+    font-size:16px;
+    font-weight:bold;
+  }
+}
+a[data-draft-node='block'] {
+  margin:10px auto 0;
+  width:400px;
+  padding:16px 0;
+  text-align:center;
+  display:block;
+  background-color:rgb(246,246,246);
+  font-size:15px;
+  color:#121212;
+  border-radius:4px;
+}

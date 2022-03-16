@@ -12,16 +12,27 @@
             <span class="description">{{item.author.headline}}</span>
           </div>
           <div class="agree-text">{{item.voteup_count}} 人赞同了该文章</div>
+          <div class="title-image">
+            <img :src="item.title_image" alt="" style="max-width:100%">
+          </div>
         </template>
         <div class="content">
-          <template v-if="item.is_fold">{{item.excerpt}}</template>
+          <div v-if="item.is_fold" class="excerpt-container">
+            <div v-if="item.title_image" class="excerpt-image" :style="{
+              backgroundImage:'url(' + item.title_image + ')'
+            }">
+            </div>
+            <div class="excerpt">
+              <span>{{item.excerpt}}</span>
+              <span class="read-more" @click.stop="handleToggleItemFold(item)">
+                阅读全文<i class="icon"><down-outlined/></i>
+              </span>
+            </div>
+          </div>
           <template v-else>
             <div v-html="item.content"></div>
+            <span @click.stop="handleToggleItemFold(item)" class="read-more">收起<i class="icon"><up-outlined/></i></span>
           </template>
-          <span class="read-more" @click.stop="handleToggleItemFold(item)">
-            <template v-if="item.is_fold">阅读全文<i class="icon"><down-outlined/></i></template>
-            <template v-else>收起<i class="icon"><up-outlined/></i></template>
-          </span>
         </div>
       </div>
     </div>
@@ -59,6 +70,7 @@ export default defineComponent({
           id: route.params.id
         }
       }).then(res => {
+        console.log(res)
         list.value = res.map(item => ({ ...item, is_fold: true }))
       }).finally(() => {
         spinning.value = false
@@ -92,6 +104,26 @@ export default defineComponent({
       cursor:pointer;
       padding:16px 20px;
       border-bottom:1px solid #e8e8e8;
+    }
+    .excerpt-container{
+      display:flex;
+      justify-content:space-between;
+      .excerpt{
+        padding-left:10px;
+        flex:1;
+        min-width:0;
+      }
+      .excerpt-image{
+        width:180px;
+        height:110px;
+        background-repeat:no-repeat;
+        background-size:cover;
+        background-position:center;
+      }
+    }
+    .title-image{
+      padding:10px 0;
+      text-align:center;
     }
     .agree-text{
       padding:10px 0;

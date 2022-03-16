@@ -1,7 +1,7 @@
 <template>
   <teleport to="body">
     <template v-if="visible">
-      <div class="back-top-container" :title="回到顶部">
+      <div class="back-top-container" title="回到顶部">
         <span class="icon" @click.stop="handleTop"><vertical-align-top-outlined/></span>
       </div>
     </template>
