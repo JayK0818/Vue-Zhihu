@@ -81,7 +81,7 @@ export default defineComponent({
       if (value) {
         if (loading.value) return
         loading.value = true
-        message.loading('正在登录...', 0)
+        const hide = message.loading('正在登录...', 0)
         axios({
           url: '/api/login',
           method: 'post',
@@ -100,7 +100,7 @@ export default defineComponent({
           window.alert('账号或密码错误')
         }).finally(() => {
           loading.value = false
-          // hide()
+          hide()
         })
       }
     }
