@@ -37,7 +37,7 @@ import { defineComponent, ref, onMounted } from 'vue'
 import axios from '@/common/js/axios.js'
 import Loading from '@/components/loading/index.vue'
 
-const ColumnListLength = 6
+const ColumnListLength = 3
 
 export default defineComponent({
   name: 'home',
