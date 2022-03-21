@@ -37,7 +37,7 @@ import { defineComponent, ref, onMounted } from 'vue'
 import axios from '@/common/js/axios.js'
 import Loading from '@/components/loading/index.vue'
 
-const ColumnListLength = 3
+const ColumnListLength = 2
 
 export default defineComponent({
   name: 'home',
@@ -100,6 +100,7 @@ export default defineComponent({
 
 <style scoped lang='scss'>
 .page{
+  padding-bottom:20px;
   background-color:#fbfcfc;
 }
 .column-wrapper-header{

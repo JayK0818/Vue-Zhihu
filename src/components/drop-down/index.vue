@@ -5,17 +5,26 @@
       <dropdown-item>
         <div class="item">
           <span class="icon"><form-outlined/></span>
-          <span class="text">写文章</span>
+          <span class="text" @click.stop='createColumn'>写文章</span>
         </div>
       </dropdown-item>
       <dropdown-item>
         <div class="item">
           <span class="icon"><edit-outlined/></span>
-          <span class="text">专栏</span>
+          <span class="text" @click.stop='goColumn'>专栏 · 发现</span>
         </div>
       </dropdown-item>
       <dropdown-item>
-        <div class="item" @click.stop="logout"><span class="icon"><logout-outlined/></span><span class="text">退出登录</span></div>
+        <div class='item'>
+          <span class='icon'><menu-outlined/></span>
+          <span class='text'>我的专栏</span>
+        </div>
+      </dropdown-item>
+      <dropdown-item>
+        <div class="item" @click.stop="logout">
+          <span class="icon"><logout-outlined/></span>
+          <span class="text">退出登录</span>
+        </div>
       </dropdown-item>
     </ul>
   </div>
@@ -23,7 +32,7 @@
 
 <script lang='ts'>
 import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
-import { CaretDownOutlined, LogoutOutlined, FormOutlined, EditOutlined } from '@ant-design/icons-vue'
+import { CaretDownOutlined, LogoutOutlined, FormOutlined, EditOutlined, MenuOutlined } from '@ant-design/icons-vue'
 import DropdownItem from './components/dropdown-item.vue'
 import { userKey } from '@/common/js/util'
 import { useRouter } from 'vue-router'
@@ -41,7 +50,8 @@ export default defineComponent({
     [DropdownItem.name]: DropdownItem,
     [LogoutOutlined.name]: LogoutOutlined,
     [FormOutlined.name]: FormOutlined,
-    [EditOutlined.name]: EditOutlined
+    [EditOutlined.name]: EditOutlined,
+    [MenuOutlined.name]: MenuOutlined
   },
   setup () {
     const dropdownRef = ref<null | HTMLElement>(null)
@@ -67,11 +77,24 @@ export default defineComponent({
       window.localStorage.removeItem(userKey)
       router.replace('/login')
     }
+    function goColumn (): void {
+      router.push('/')
+      hide()
+    }
+    function createColumn (): void {
+      router.push('/create')
+      hide()
+    }
+    function hide (): void {
+      visible.value = false
+    }
     return {
       visible,
       toggle,
       dropdownRef,
-      logout
+      logout,
+      goColumn,
+      createColumn
     }
   }
 })

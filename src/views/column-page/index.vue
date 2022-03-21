@@ -1,5 +1,12 @@
 <template>
-  <navigation-bar/>
+  <navigation-bar>
+    <template v-slot:column>
+      <div v-if='title' class='column-slot-container'>
+        <div style='font-size:12px;color:#8590a6;padding-bottom:4px;'>专栏</div>
+        <div class='column-title'>{{title}}</div>
+      </div>
+    </template>
+  </navigation-bar>
   <div class="page">
     <loading v-if="spinning"/>
     <div v-if="list.length" class="column-container">
@@ -18,10 +25,7 @@
         </template>
         <div class="content">
           <div v-if="item.is_fold" class="excerpt-container">
-            <div v-if="item.title_image" class="excerpt-image" :style="{
-              backgroundImage:'url(' + item.title_image + ')'
-            }">
-            </div>
+            <div class='excerpt-image'><img v-lazy='item.title_image'></div>
             <div class="excerpt">
               <span>{{item.excerpt}}</span>
               <span class="read-more" @click.stop="handleToggleItemFold(item)">
@@ -61,6 +65,7 @@ export default defineComponent({
   setup () {
     const spinning = ref<boolean>(true)
     const list = ref([])
+    const title = ref<string>('')
     const route = useRoute()
     function getColumnItem () {
       axios({
@@ -70,8 +75,10 @@ export default defineComponent({
           id: route.params.id
         }
       }).then(res => {
-        console.log(res)
-        list.value = res.map(item => ({ ...item, is_fold: true }))
+        const { title: _title, list: _list } = res
+        title.value = _title
+        list.value = _list.map(item => ({ ...item, is_fold: true }))
+        setDocumentTitle(_title)
       }).finally(() => {
         spinning.value = false
       })
@@ -82,9 +89,13 @@ export default defineComponent({
     onMounted(() => {
       getColumnItem()
     })
+    function setDocumentTitle (title: string): void {
+      document.title = `${title} - 知乎`
+    }
     return {
       spinning,
       list,
+      title,
       handleToggleItemFold
     }
   }
@@ -92,6 +103,17 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.column-slot-container{
+  margin-left:30px;
+  padding-left:8px;
+  border-left:1px solid #e8e8e8;
+  display:inline-block;
+  .column-title{
+    font-size:14px;
+    font-weight:bold;
+    color:#212121;
+  }
+}
 .page{
   color:#121212;
   padding-top:16px;
@@ -116,9 +138,13 @@ export default defineComponent({
       .excerpt-image{
         width:180px;
         height:110px;
-        background-repeat:no-repeat;
-        background-size:cover;
-        background-position:center;
+        text-align:center;
+        background-color:rgba(18,18,18,.02);
+        img{
+          max-width:100%;
+          max-height:100%;
+          transition:all .3s;
+        }
       }
     }
     .title-image{

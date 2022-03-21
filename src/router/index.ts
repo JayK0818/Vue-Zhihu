@@ -22,6 +22,14 @@ const routes: Array<RouteRecordRaw> = [
     path: '/column/:id',
     name: 'ColumnPage',
     component: () => import(/* webpackChunkName: 'column-page' */ '@/views/column-page/index.vue')
+  },
+  {
+    path: '/create',
+    name: 'CreateColumn',
+    component: () => import(/* webpackChunkName: 'create-column' */ '@/views/create-column/index.vue'),
+    meta: {
+      title: '写文章 - 知乎'
+    }
   }
 ]
 
