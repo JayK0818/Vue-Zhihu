@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+/* @ts-ignore */
 import { ColumnProps } from '@/components/column-list/index.vue'
 export interface CacheColumnProps {
   page: number
@@ -21,7 +22,6 @@ const useColumnStore = defineStore('column', {
       if (columnIndex >= 0) {
         this.result.splice(columnIndex, 1)
       }
-      console.log(this.result)
     }
   }
 })

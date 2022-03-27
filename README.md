@@ -1,24 +1,13 @@
-# vue-zhihu
+# 仿知乎项目
 
-## Project setup
-```
-yarn install
-```
+  运行此项目:
+```js
+git clone http://www.github.com/JayK0720/Vue-zhihu.git
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+cd vue-zhihu
 
-### Compiles and minifies for production
-```
-yarn build
-```
+cnpm install / npm install
 
-### Lints and fixes files
+npm run serve
 ```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+  

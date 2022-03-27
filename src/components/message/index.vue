@@ -59,7 +59,7 @@ export default defineComponent({
   margin-top:10px;
   display:inline-block;
   padding:8px 12px;
-  font-size:16px;
+  font-size:14px;
   background-color:#fff;
   border-radius:2px;
   box-shadow:0 2px 10px 0 rgba(0,0,0,.1);
@@ -80,6 +80,6 @@ export default defineComponent({
   }
 }
 .text{
-  color:rgba(0,0,0,.65);
+  color:rgba(0,0,0,.85);
 }
 </style>

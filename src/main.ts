@@ -4,6 +4,7 @@ import router from './router'
 import '@/common/css/index.scss'
 import lazyPlugin from 'vue3-lazy'
 import { createPinia } from 'pinia'
+import 'highlight.js/styles/github.css'
 
 const app = createApp(App).use(createPinia()).use(router)
 app.use(lazyPlugin, {
