@@ -6,7 +6,7 @@
       <div class="logo"></div>
       <div class="title">随心写作,自由表达</div>
       <div class="button-container">
-        <v-button type="default">开始写文章</v-button>
+        <v-button type="default" @click.stop='createColumn'>开始写文章</v-button>
       </div>
     </div>
     <div class="column-recommendation-wrapper">
@@ -36,6 +36,9 @@ import { SyncOutlined } from '@ant-design/icons-vue'
 import { defineComponent, ref, onMounted } from 'vue'
 import axios from '@/common/js/axios.js'
 import Loading from '@/components/loading/index.vue'
+import { useRouter } from 'vue-router'
+import useColumnStore from '@/store/column'
+import { storeToRefs } from 'pinia'
 
 const ColumnListLength = 2
 
@@ -51,8 +54,12 @@ export default defineComponent({
   setup () {
     const columnList = ref<ColumnProps []>([])
     const loading = ref<boolean>(false)
-    const spinning = ref<boolean>(true)
+    const spinning = ref<boolean>(false)
     const page = ref<number>(0)
+    const router = useRouter()
+    const store = useColumnStore()
+    const { cacheColumn } = store // 获取缓存数据的方法,没请求一次,就将数据缓存起来
+    const { result } = storeToRefs(store)
     function getColumnList (page): Promise<ColumnProps[]> {
       return new Promise(resolve => {
         axios({
@@ -69,30 +76,51 @@ export default defineComponent({
       })
     }
     onMounted(() => {
-      getColumnList(page.value).then(list => {
-        columnList.value = list
-      }).finally(() => {
-        spinning.value = false
-      })
+      if (result.value.length) {
+        const lastColumn = result.value[result.value.length - 1]
+        columnList.value = lastColumn.data
+        page.value = lastColumn.page
+      } else {
+        spinning.value = true
+        getColumnList(page.value).then(list => {
+          columnList.value = list
+          cacheColumn(page.value, list) // 如果没有缓存数据,将第一次请求的数据添加进缓存
+        }).finally(() => {
+          spinning.value = false
+        })
+      }
     })
-    function changeColumn () {
-      loading.value = true
+    function changeColumn ():void {
       if (page.value >= ColumnListLength) {
         page.value = 0
       } else {
         page.value += 1
       }
-      getColumnList(page.value).then(list => {
-        columnList.value = list
-      }).finally(() => {
-        loading.value = false
-      })
+      const findColumn = result.value.find(c => c.page === page.value)
+      if (result.value.length && findColumn) {
+        columnList.value = findColumn.data
+        cacheColumn(page.value, findColumn.data)
+      } else {
+        loading.value = true
+        spinning.value = true
+        getColumnList(page.value).then(list => {
+          columnList.value = list
+          cacheColumn(page.value, list)
+        }).finally(() => {
+          loading.value = false
+          spinning.value = false
+        })
+      }
+    }
+    function createColumn ():void {
+      router.push('/create')
     }
     return {
       columnList,
       changeColumn,
       loading,
-      spinning
+      spinning,
+      createColumn
     }
   }
 })

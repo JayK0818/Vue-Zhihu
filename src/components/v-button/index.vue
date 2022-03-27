@@ -1,5 +1,5 @@
 <template>
-  <button class="button" :class="[type,size]" @click.stop="handleClick">
+  <button class="button" :class="[type,size]" @click="handleClick">
     <span v-if="hasIcon" class='icon' :class="{active:loading}">
       <slot name="prefix"></slot>
     </span>
@@ -35,9 +35,9 @@ export default {
     if (context.slots.prefix) {
       hasIcon.value = true
     }
-    function handleClick () {
+    function handleClick (e) {
       if (props.loading) return
-      context.emit('click')
+      context.emit('click', e)
     }
     return {
       hasIcon,

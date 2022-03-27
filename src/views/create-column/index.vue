@@ -10,22 +10,35 @@
         <input type="text" class='column-input' placeholder='请输入文章标题 (最多100个字)'>
       </div>
       <div class='item'>
-        <textarea class='textarea' placeholder='请输入正文'></textarea>
+        <textarea class='textarea' placeholder='请输入正文' v-model='content'></textarea>
       </div>
     </div>
-    <div class='preview-container'></div>
+    <div class='info-container'>
+    </div>
   </div>
+  <back-top/>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script lang='ts'>
+import { defineComponent, ref, watch } from 'vue'
 import NavigationBar from '@/components/navigation-bar/index.vue'
+import BackTop from '@/components/back-top/index.vue'
+// @ts-ignore
+import { marked } from 'marked'
 export default defineComponent({
   components: {
-    [NavigationBar.name]: NavigationBar
+    [NavigationBar.name]: NavigationBar,
+    [BackTop.name]: BackTop
   },
   setup () {
-    console.log('hello world')
+    const content = ref<string>('')
+    watch(content, (newValue) => {
+      const string = marked(newValue)
+      console.log(string)
+    })
+    return {
+      content
+    }
   }
 })
 </script>
@@ -39,17 +52,12 @@ export default defineComponent({
   border-left:1px solid #e8e8e8;
 }
 .page{
-  display:flex;
-  justify-content:space-between;
-  min-width:1000px;
-}
-.preview-container{
-  padding:10px;
-  flex:1;
+  margin:0 auto;
+  max-width:1200px;
+  min-width:900px;
 }
 .content{
   padding:10px;
-  flex:1;
   .textarea,.column-input{
     width:100%;
     min-width:0;
@@ -74,7 +82,7 @@ export default defineComponent({
     padding:8px;
     font-size:14px;
     resize:none;
-    height:480px;
+    min-height:480px;
   }
 }
 </style>

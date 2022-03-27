@@ -30,6 +30,11 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: '写文章 - 知乎'
     }
+  },
+  {
+    path: '/lottery',
+    name: '体彩',
+    component: () => import(/* webpackChunkName: 'lottery' */ '@/components/lottery/index.vue')
   }
 ]
 
